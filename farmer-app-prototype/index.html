@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KisanSaathi — Better Farming, Brighter Future | शेतकरी मोबाईल ॲप</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>">
+</head>
+<body>
+
+  <!-- Viewport Switcher & Trilingual Quick Selector -->
+  <div class="viewport-controls">
+    <span>📱 <strong>KisanSaathi</strong> Preview:</span>
+    <button id="btnViewPhone" class="viewport-btn active">Mobile Frame</button>
+    <button id="btnViewFull" class="viewport-btn">Expanded View</button>
+    <span style="opacity: 0.4;">|</span>
+    <button class="viewport-btn lang-pill" data-lang="en" onclick="setLanguage('en')">English</button>
+    <button class="viewport-btn lang-pill" data-lang="hi" onclick="setLanguage('hi')">हिंदी</button>
+    <button class="viewport-btn lang-pill active" data-lang="mr" onclick="setLanguage('mr')">मराठी</button>
+  </div>
+
+  <!-- Android Phone Frame Simulator -->
+  <div class="phone-frame">
+
+    <!-- Toast Notification Banner -->
+    <div id="toastNotice" class="toast-notice"></div>
+
+    <!-- Android Status Bar -->
+    <div class="status-bar" id="appStatusBar">
+      <span>09:41</span>
+      <div class="camera-notch"></div>
+      <div class="status-icons">
+        <span>5G</span>
+        <span>📶</span>
+        <span>🔋 92%</span>
+      </div>
+    </div>
+
+    <!-- Main Scrollable Screen Host -->
+    <div class="screen-container">
+
+      <!-- ==================== SCREEN A: LOGIN ==================== -->
+      <section id="screen-login" class="screen active">
+        <div style="background: linear-gradient(180deg, #14532d 0%, #166534 60%, #f4f7f4 100%); padding: 36px 20px 24px 20px; color: #fff; text-align: center;">
+          <div style="width: 72px; height: 72px; background: rgba(255,255,255,0.2); backdrop-filter: blur(8px); border-radius: 20px; margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center; font-size: 36px; border: 2px solid rgba(255,255,255,0.4); box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+            🌾
+          </div>
+          <h1 style="font-family: var(--font-heading); font-size: 26px; font-weight: 800; letter-spacing: -0.5px;" data-i18n="appName">किसान साथी</h1>
+          <p style="font-size: 13px; color: #bbf7d0; font-weight: 500; margin-top: 4px;" data-i18n="appTagline">समृद्ध शेती, उज्ज्वल भविष्य</p>
+
+          <!-- Language Selector Pills -->
+          <div style="display: inline-flex; background: rgba(0,0,0,0.25); border-radius: var(--radius-full); padding: 4px; margin-top: 18px; border: 1px solid rgba(255,255,255,0.15);">
+            <button class="viewport-btn lang-pill" data-lang="en" onclick="setLanguage('en')">English</button>
+            <button class="viewport-btn lang-pill" data-lang="hi" onclick="setLanguage('hi')">हिंदी</button>
+            <button class="viewport-btn lang-pill active" data-lang="mr" onclick="setLanguage('mr')">मराठी</button>
+          </div>
+        </div>
+
+        <div class="content-body" style="margin-top: -12px;">
+          <div class="card" style="box-shadow: var(--shadow-lg);">
+            <h2 style="font-family: var(--font-heading); font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 4px;" data-i18n="loginTitle">शेतकरी लॉगिन</h2>
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;" data-i18n="loginSubtitle">आपल्या शेती आणि पिकांच्या व्यवस्थापनासाठी लॉगिन करा</p>
+
+            <form id="loginForm">
+              <div class="form-group">
+                <label class="form-label" data-i18n="mobileLabel">मोबाईल नंबर</label>
+                <div style="position: relative; display: flex; align-items: center;">
+                  <span style="position: absolute; left: 12px; font-weight: 600; font-size: 13px; color: #64748b;">+91</span>
+                  <input type="tel" id="loginMobile" class="form-input" style="padding-left: 48px; width: 100%;" placeholder="9822012345" maxlength="10" value="9822012345" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <label class="form-label" style="margin-bottom: 0;" data-i18n="passwordLabel">पासवर्ड</label>
+                  <button type="button" id="togglePasswordBtn" style="background: none; border: none; font-size: 12px; color: var(--primary-700); font-weight: 600; cursor: pointer;" data-i18n="showPassword">दाखवा</button>
+                </div>
+                <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" value="farmer123" required>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 6px;" data-i18n="loginButton">
+                लॉगिन करा ➜
+              </button>
+            </form>
+
+            <div style="margin: 16px 0 12px 0; text-align: center;">
+              <button id="demoQuickLoginBtn" class="btn btn-demo" style="width: 100%; font-size: 12.5px;" data-i18n="quickDemoButton">
+                ⚡ जलद डेमो लॉगिन: राहुल पाटील
+              </button>
+            </div>
+
+            <div style="text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+              <span data-i18n="dontHaveAccount">खाते नाही का?</span>
+              <a href="#" style="color: var(--primary-700); font-weight: 700; text-decoration: none;" onclick="showToast('Registration demo form ready');" data-i18n="registerLink">येथे नोंदणी करा</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SCREEN B: FARMER DASHBOARD ==================== -->
+      <section id="screen-dashboard" class="screen">
+        <!-- Curved Green Header -->
+        <div class="curved-header">
+          <div class="header-top">
+            <div class="farmer-welcome">
+              <span class="farmer-greeting" id="dashGreetingText">शुभ सकाळ, राहुल पाटील! 🙏</span>
+              <span class="farmer-name">राहुल कृषी फार्म</span>
+            </div>
+            <div class="farmer-avatar-wrap" onclick="navigateTo('screen-profile')">
+              👨‍🌾
+            </div>
+          </div>
+
+          <div class="location-badge">
+            <span>📍</span>
+            <span>माळेगाव बु., बारामती, पुणे (महाराष्ट्र)</span>
+          </div>
+
+          <!-- Search Bar with Mic -->
+          <div class="search-bar-wrap">
+            <span class="search-icon-left">🔍</span>
+            <input type="text" class="search-input" data-i18n-placeholder="searchPlaceholder" placeholder="पिके, कीड, बाजारभाव शोधा...">
+            <span class="mic-icon-right" onclick="showToast('🎤 Voice Search Activated...');">🎙️</span>
+          </div>
+        </div>
+
+        <!-- Floating Weather Widget (Reference Design Screen 1) -->
+        <div class="weather-floating-card" onclick="navigateTo('screen-weather')">
+          <div class="weather-header">
+            <div>
+              <div style="font-size: 12px; color: var(--text-muted); font-weight: 600;" data-i18n="weatherCardTitle">आजचे हवामान</div>
+              <div class="weather-temp-row">
+                <span class="temp-large">31°C</span>
+                <span class="temp-hi-low">कमाल: 33° • किमान: 21°</span>
+              </div>
+            </div>
+            <div class="weather-icon-illustration">⛅</div>
+          </div>
+
+          <div class="weather-stats-grid">
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="humidity">आर्द्रता</span>
+              <span class="stat-val">72%</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="precipitation">पाऊस</span>
+              <span class="stat-val">10%</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="windSpeed">वारा</span>
+              <span class="stat-val">8 km/h</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label" data-i18n="pressure">दाब</span>
+              <span class="stat-val">940 hPa</span>
+            </div>
+          </div>
+
+          <div class="advisory-pill">
+            <span>💡</span>
+            <span data-i18n="sprayAdvisoryGood">औषध फवारणीसाठी आजचा दिवस उत्तम आहे. वारा शांत आहे.</span>
+          </div>
+        </div>
+
+        <div class="content-body" style="padding-top: 0;">
+
+          <!-- My Farm Snapshot Card -->
+          <div class="farm-snapshot-card" onclick="navigateTo('screen-my-farm')">
+            <div class="farm-snapshot-header">
+              <div class="farm-title" data-i18n="myFarmSummary">माझ्या शेतीचा गोषवारा</div>
+              <span style="font-size: 12px; color: var(--primary-700); font-weight: 700;" data-i18n="viewAllFarms">तपशील पहा ➜</span>
+            </div>
+            <div style="font-size: 12px; color: var(--text-muted);">
+              १२.५ एकर • ३ भूखंड (प्लॉट) • खोल काळी जमीन (नदीकाठ)
+            </div>
+            <div class="crop-chips-row">
+              <span class="crop-chip">🎋 ऊस Co-86032 (5.0 Ac)</span>
+              <span class="crop-chip">🌾 गहू HD-2967 (4.0 Ac)</span>
+              <span class="crop-chip">🧅 लाल कांदा (3.5 Ac)</span>
+            </div>
+          </div>
+
+          <!-- Five Core Module Cards -->
+          <div class="section-header">
+            <h3 class="section-title" data-i18n="coreModulesTitle">कृषी सेवा (५ मॉड्यूल्स)</h3>
+          </div>
+
+          <div class="modules-grid">
+            <!-- Module 1: Weather -->
+            <div class="module-card" onclick="navigateTo('screen-weather')">
+              <div class="module-icon-wrap bg-sky">⛅</div>
+              <div class="module-info">
+                <span class="module-title" data-i18n="moduleWeather">हवामान व सल्ला</span>
+                <span class="module-desc" data-i18n="moduleWeatherDesc">७ दिवसांचा अंदाज व फवारणी वेळ</span>
+              </div>
+            </div>
+
+            <!-- Module 2: Pest & Disease -->
+            <div class="module-card" onclick="navigateTo('screen-pest')">
+              <div class="module-icon-wrap bg-rose">🐛</div>
+              <div class="module-info">
+                <span class="module-title" data-i18n="modulePest">रोग व कीड निदान</span>
+                <span class="module-desc" data-i18n="modulePestDesc">पानाच्या फोटोवरून ओळख व उपाय</span>
+              </div>
+            </div>
+
+            <!-- Module 3: Sugarcane Guide -->
+            <div class="module-card" onclick="navigateTo('screen-sugarcane')">
+              <div class="module-icon-wrap bg-emerald">🎋</div>
+              <div class="module-info">
+                <span class="module-title" data-i18n="moduleSugarcane">ऊस पीक मार्गदर्शन</span>
+                <span class="module-desc" data-i18n="moduleSugarcaneDesc">Co-86032 टप्पे, खत व तोडणी</span>
+              </div>
+            </div>
+
+            <!-- Module 4: GIS Farm Map -->
+            <div class="module-card" onclick="navigateTo('screen-gis-map')">
+              <div class="module-icon-wrap bg-amber">🗺️</div>
+              <div class="module-info">
+                <span class="module-title" data-i18n="moduleGisMap">शेताचा नकाशा (GIS)</span>
+                <span class="module-desc" data-i18n="moduleGisMapDesc">अचूक GPS हद्दी आणि क्षेत्रफळ</span>
+              </div>
+            </div>
+
+            <!-- Module 5: Telemetry & Activity Log (Full Span) -->
+            <div class="module-card span-2" onclick="navigateTo('screen-telemetry')">
+              <div class="module-icon-wrap bg-indigo">📋</div>
+              <div class="module-info">
+                <span class="module-title" data-i18n="moduleTelemetry">माती आणि पीक आरोग्य टेलिमेट्री</span>
+                <span class="module-desc" data-i18n="moduleTelemetryDesc">ओलावा ७२%, सामू (pH) ६.८, कामांची नोंद व आलेख</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Farm Alerts & Reminders -->
+          <div class="alerts-card">
+            <div style="font-weight: 700; font-size: 12.5px; color: #92400e; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+              <span>⚠️</span>
+              <span data-i18n="alertsTitle">शेती अलर्ट व सूचना</span>
+            </div>
+            <div class="alert-item">
+              <span>•</span>
+              <span data-i18n="alert1Text">ऊस प्लॉट २: ठिबक सिंचनातून खत देणे आज सकाळी १०:०० वाजता नियोजित आहे</span>
+            </div>
+            <div class="alert-item">
+              <span>•</span>
+              <span data-i18n="alert2Text">लाल कांदा प्लॉट ३: पीक काढणीसाठी तयार आहे, काढणी सुरू करा.</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ==================== SCREEN C: MY FARM ==================== -->
+      <section id="screen-my-farm" class="screen">
+        <div class="nav-header">
+          <button class="back-btn" onclick="goBack()">←</button>
+          <span class="screen-title" data-i18n="myFarmTitle">माझी शेती व्यवस्थापन</span>
+          <button class="btn btn-secondary" style="min-height: 36px; padding: 6px 12px; font-size: 12px;" onclick="openAddFieldModal()" data-i18n="addFieldBtn">
+            + नवीन प्लॉट
+          </button>
+        </div>
+
+        <div class="content-body">
+          <!-- Farm Hero Banner -->
+          <div class="card" style="background: linear-gradient(135deg, #14532d 0%, #166534 100%); color: #fff; padding: 18px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <h2 style="font-family: var(--font-heading); font-size: 18px; font-weight: 700;">राहुल कृषी फार्म</h2>
+                <div style="font-size: 12px; color: #bbf7d0; margin-top: 2px;">📍 माळेगाव बु., बारामती, पुणे (महाराष्ट्र)</div>
+              </div>
+              <span style="background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: var(--radius-full); font-size: 11px; font-weight: 700;">
+                १२.५ एकर
+              </span>
+            </div>
+            <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.15); display: flex; justify-content: space-between; font-size: 11.5px;">
+              <span>🌱 माती: <strong>खोल काळी जमीन</strong></span>
+              <span>💧 पाणी: <strong>निरा डावा कालवा व विहीर</strong></span>
+            </div>
+          </div>
+
+          <!-- Quick Action to GIS Map -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin: 4px 0 12px 0;">
+            <h3 class="section-title" data-i18n="fieldListTitle">पिकांचे प्लॉट</h3>
+            <button class="btn btn-secondary" style="min-height: 32px; padding: 4px 10px; font-size: 11px;" onclick="navigateTo('screen-gis-map')">
+              🗺️ GIS नकाशा उघडा
+            </button>
+          </div>
+
+          <!-- Dynamic Field Cards -->
+          <div id="fieldsContainer"></div>
+        </div>
+      </section>
+
+      <!-- ==================== SCREEN D: WEATHER & ADVISORY ==================== -->
+      <section id="screen-weather" class="screen">
+        <div class="nav-header">
+          <button class="back-btn" onclick="goBack()">←</button>
+          <span class="screen-title" data-i18n="weatherTitle">हवामान व कृषी सल्ला</span>
+          <span>⛅</span>
+        </div>
+
+        <div class="content-body">
+          <!-- Main Weather Conditions Card -->
+          <div class="card" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #fff;">
+            <div style="font-size: 12px; color: #e0f2fe;">📍 बारामती, पुणे • रविवार, १० ऑक्टोबर</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0;">
+              <div>
+                <span style="font-family: var(--font-heading); font-size: 44px; font-weight: 800;">31°C</span>
+                <div style="font-size: 13px; color: #bae6fd;">अंशतः ढगाळ • कमाल: 33° • किमान: 21°</div>
+              </div>
+              <div style="font-size: 50px;">⛅</div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.2); text-align: center;">
+              <div>
+                <div style="font-size: 10px; color: #bae6fd;" data-i18n="humidity">आर्द्रता</div>
+                <div style="font-size: 12px; font-weight: 700;">72%</div>
+              </div>
+              <div>
+                <div style="font-size: 10px; color: #bae6fd;" data-i18n="windSpeed">वारा</div>
+                <div style="font-size: 12px; font-weight: 700;">8 km/h</div>
+              </div>
+              <div>
+                <div style="font-size: 10px; color: #bae6fd;" data-i18n="precipitation">पाऊस</div>
+                <div style="font-size: 12px; font-weight: 700;">10%</div>
+              </div>
+              <div>
+                <div style="font-size: 10px; color: #bae6fd;" data-i18n="sunrise">सूर्योदय</div>
+                <div style="font-size: 12px; font-weight: 700;">06:14 AM</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Spray Advisory Box -->
+          <div class="card" style="border-left: 4px solid var(--primary-500);">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-800); margin-bottom: 4px;" data-i18n="sprayWindow">
+              कीटकनाशक फवारणी अनुकूलता
+            </div>
+            <div style="font-size: 11.5px; color: #15803d; font-weight: 700; margin-bottom: 4px;" data-i18n="sprayWindowStatus">
+              उत्तम वेळ (सुरक्षित हवामान)
+            </div>
+            <div style="font-size: 12px; color: var(--text-muted); line-height: 1.4;" data-i18n="sprayAdvisoryGood">
+              औषध फवारणीसाठी आजचा दिवस उत्तम आहे. वाऱ्याचा वेग ८ किमी/तास असून पावसाची कोणतीही जोखीम नाही.
+            </div>
+          </div>
+
+          <!-- Irrigation Advisory Box -->
+          <div class="card" style="border-left: 4px solid var(--accent-sky);">
+            <div style="font-weight: 700; font-size: 13px; color: #0369a1; margin-bottom: 4px;" data-i18n="irrigationGuidance">
+              सिंचन सल्ला
+            </div>
+            <div style="font-size: 12px; color: var(--text-muted); line-height: 1.4;" data-i18n="irrigationGuidanceText">
+              मातीत ७२% ओलावा उपलब्ध आहे. आज पाणी देणे टाळा, वीज वाचवा आणि मूळकुज रोखा.
+            </div>
+          </div>
+
+          <!-- 7-Day Forecast -->
+          <h3 class="section-title" data-i18n="forecast7Day">७ दिवसांचा शेती हवामान अंदाज</h3>
+          <div id="forecast7DayContainer" style="margin-top: 8px;"></div>
+        </div>
+      </section>
+
+      <!-- ==================== SCREEN E: PEST & DISEASE SCANNER ==================== -->
+      <section id="screen-pest" class="screen">
+        <div class="nav-header">
+          <button class="back-btn" onclick="goBack()">←</button>
+          <span class="screen-title" data-i18n="pestTitle">पीक आरोग्य व कीड तपासणी</span>
+          <span>🔬</span>
+        </div>
+
+        <div class="content-body">
+          <div class="form-group">
+            <label class="form-label" data-i18n="selectCropLabel">पीक निवडा</label>
+            <select id="pestCropSelect" class="form-input">
+              <option value="sugarcane">ऊस (Sugarcane - Co-86032)</option>
+              <option value="tomato">टोमॅटो (Tomato)</option>
+              <option value="wheat">गहू (Wheat - HD-2967)</option>
+              <option value="onion">कांदा (Red Onion)</option>
+            </select>
+          </div>
+
+          <!-- Camera & Leaf Viewport Simulator -->
+          <div class="scanner-viewport">
+            <img id="pestLeafPreviewImg" class="leaf-preview-img" src="https://images.unsplash.com/photo-1595974482597-4b8da8879bc5?auto=format&fit=crop&w=600&q=80" alt="Crop Leaf">
+            <div id="scannerLaserLine" class="laser-scan-line"></div>
+            <div id="scannerStatusBadge" class="scanner-overlay-badge">📷 पाण्याचे छायाचित्र तयार आहे</div>
+          </div>
+
+          <button id="startScanBtn" class="btn btn-primary" style="width: 100%; margin-bottom: 16px;" data-i18n="tapToScan">
+            ⚡ लक्षणे तपासण्यासाठी स्कॅन करा
+          </button>
+
+          <!-- Diagnosis Result Card -->
+          <div id="pestResultCard" class="card" style="border: 2px solid #ef4444; background: #fff;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
+              <span style="font-size: 11px; color: #dc2626; font-weight: 700; text-transform: uppercase;">निदान निष्कर्ष</span>
+              <span style="background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: var(--radius-full); font-size: 11px; font-weight: 700;" id="diagConfidenceVal">94%</span>
+            </div>
+
+            <h3 id="diagConditionName" style="font-family: var(--font-heading); font-size: 16px; font-weight: 800; color: #991b1b; margin-bottom: 4px;">
+              ऊस लाल कूज / काणी रोग (Red Rot)
+            </h3>
+            <div style="font-size: 11.5px; color: #b45309; font-weight: 600; margin-bottom: 12px;">
+              तीव्रता: <span id="diagSeverityVal">मध्यम जोखीम</span>
+            </div>
+
+            <div style="font-size: 12px; margin-bottom: 10px;">
+              <strong data-i18n="symptomsTitle">मुख्य लक्षणे:</strong>
+              <p id="diagSymptomsVal" style="color: var(--text-muted); margin-top: 2px; line-height: 1.4;">
+                पानाच्या मधोमध लाल रंगाचे पट्टे आणि आतला गाभा लाल पडून पांढरे ठिपके दिसणे.
+              </p>
+            </div>
+
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-sm); padding: 10px; margin-bottom: 8px;">
+              <strong style="color: #166534; font-size: 12px;" data-i18n="organicRemedyTitle">🌿 सेंद्रिय / जैविक उपाय:</strong>
+              <p id="diagOrganicVal" style="color: #14532d; font-size: 11.5px; margin-top: 3px; line-height: 1.35;">
+                ट्रायकोडर्मा व्हिरीडी २.५ किलो प्रति एकर शेणखतात मिसळून जमिनीत द्या. प्रादुर्भाव झालेली बेटे उपटून जाळून टाका.
+              </p>
+            </div>
+
+            <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-sm); padding: 10px; margin-bottom: 8px;">
+              <strong style="color: #991b1b; font-size: 12px;" data-i18n="chemicalRemedyTitle">🧪 रासायनिक औषध शिफारस:</strong>
+              <p id="diagChemicalVal" style="color: #7f1d1d; font-size: 11.5px; margin-top: 3px; line-height: 1.35;">
+                कार्बेन्डाझिम ५०% WP @ १ ग्रॅम प्रति लिटर पाण्यात मिसळून बेणे प्रक्रिया करा किंवा फवारणी घ्या.
+              </p>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding: 10px;">
+              <strong style="color: #475569; font-size: 12px;" data-i18n="preventionTitle">🛡️ प्रतिबंधात्मक काळजी:</strong>
+              <p id="diagPreventionVal" style="color: #475569; font-size: 11.5px; margin-top: 3px; line-height: 1.35;">
+                प्रमाणित रोगमुक्त बेणे वापरा, पाण्याचा निचरा योग्य ठेवा आणि उसाचे पाचट आच्छादन करा.
+              </p>
+            </div>
+
+            <div style="margin-top: 12px; font-size: 10.5px; color: #64748b; font-style: italic;" data-i18n="protoDisclaimer">
+              सूचना: हा प्रोटोटाइप डेमोसाठी तयार केलेला निष्कर्ष आहे. प्रयोगशाळा खात्रीसाठी कृषी विज्ञान केंद्राचा सल्ला घ्या.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SCREEN F: SUGARCANE GUIDE ==================== -->
+      <section id="screen-sugarcane" class="screen">
+        <div class="nav-header">
+          <button class="back-btn" onclick="goBack()">←</button>
+          <span class="screen-title" data-i18n="caneTitle">ऊस शेती संपूर्ण मार्गदर्शक</span>
+          <span>🎋</span>
+        </div>
+
+        <div class="content-body">
+          <div class="card" style="background: linear-gradient(135deg, #14532d 0%, #166534 100%); color: #fff;">
+            <div style="font-size: 12px; color: #bbf7d0;">महाराष्ट्रातील अग्रगण्य वाण</div>
+            <h2 style="font-family: var(--font-heading); font-size: 20px; font-weight: 800; margin: 2px 0;">Co-86032 (नीरा)</h2>
+            <div style="font-size: 12px; color: #e2e8f0;">हंगाम: आडसाली (१५-१८ महिने) • साखर उतारा: १२.८% ते १३.२%</div>
+          </div>
+
+          <!-- Growth Stages Stepper -->
+          <h3 class="section-title" data-i18n="lifecycleTitle">पीक वाढीचे टप्पे</h3>
+          <div class="stages-stepper">
+            <div class="stages-line"></div>
+            <div class="stages-line-fill"></div>
+
+            <div class="stage-step done">
+              <div class="step-node">✓</div>
+              <span class="step-label">१. उगवण</span>
+            </div>
+            <div class="stage-step done">
+              <div class="step-node">✓</div>
+              <span class="step-label">२. फुटवे</span>
+            </div>
+            <div class="stage-step active">
+              <div class="step-node">३</div>
+              <span class="step-label" style="color: var(--primary-800); font-weight: 700;">मोठी वाढ (चालू)</span>
+            </div>
+            <div class="stage-step">
+              <div class="step-node">४</div>
+              <span class="step-label">४. पक्वता</span>
+            </div>
+          </div>
+
+          <!-- Active Stage Card -->
+          <div class="card" style="border: 2px solid var(--primary-500);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 11px; background: #dcfce7; color: #166534; padding: 3px 8px; border-radius: var(--radius-full); font-weight: 700;" data-i18n="activeStageBadge">
+                सध्याची चालू अवस्था
+              </span>
+              <span style="font-size: 12px; color: var(--text-muted); font-weight: 600;">१०१ ते २७० दिवस</span>
+            </div>
+            <h4 style="font-family: var(--font-heading); font-size: 16px; font-weight: 700; color: var(--primary-900); margin-bottom: 6px;">
+              ३. मोठी वाढीची अवस्था (Grand Growth Phase)
+            </h4>
+            <ul style="font-size: 12px; color: var(--text-muted); padding-left: 18px; line-height: 1.5;">
+              <li><strong>💧 पाणी व्यवस्थापन:</strong> दररोज ४-५ तास ठिबक सिंचन चालवा (पीक वाढीसाठी सर्वाधिक पाण्याची गरज).</li>
+              <li><strong>🌾 खत मात्रा:</strong> उरलेले ५०% नत्र व ५०% पलाश (MOP) १३५ दिवसांच्या आत देऊन मोठी बांधणी करा.</li>
+              <li><strong>✂️ बाळबांधणी व पाचट:</strong> खालची वाळलेली पाने काढून उसावर पाचट आच्छादन करा जेणेकरून ऊस लोळणार नाही.</li>
+            </ul>
+          </div>
+
+          <!-- Agronomic Calculators -->
+          <h3 class="section-title" data-i18n="calculatorTitle">उपयुक्त ऊस कॅल्क्युलेटर</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px;">
+            <button class="btn btn-secondary" style="font-size: 12px; padding: 10px 8px;" onclick="openSettCalculator()">
+              🎋 एकरी बेणे संख्या
+            </button>
+            <button class="btn btn-secondary" style="font-size: 12px; padding: 10px 8px;" onclick="openFertCalculator()">
+              🌾 खतांच्या पोत्यांची गणना
+            </button>
+          </div>
+
+          <!-- Brix Harvest Tester -->
+          <div class="card" style="margin-top: 14px; background: #fffbeb; border-color: #fde68a;">
+            <div style="font-weight: 700; font-size: 13px; color: #92400e; margin-bottom: 4px;" data-i18n="brixTester">
+              ऊस तोडणी पक्वता (ब्रिक्स चाचणी)
+            </div>
+            <p style="font-size: 12px; color: #78350f; line-height: 1.4;" data-i18n="brixResult">
+              हँड रिफ्रॅक्टोमीटरमध्ये ब्रिक्स १८% ते २०% झाल्यावर जास्तीत जास्त साखर उतारा मिळतो आणि तोडणी करावी.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SCREEN G1: INTERACTIVE GIS FARM MAP ==================== -->
+      <section id="screen-gis-map" class="screen">
+        <div class="nav-header">
+          <button class="back-btn" onclick="goBack()">←</button>
+          <span class="screen-title" data-i18n="gisTitle">शेताचा परस्परसंवादी नकाशा (GIS)</span>
+          <span>🗺️</span>
+        </div>
+
+        <div class="content-body">
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;" data-i18n="gisSubtitle">
+            थेट GPS निर्देशांकांसह प्लॉटच्या हद्दी व क्षेत्रफळ (बारामती, पुणे)
+          </p>
+
+          <!-- Interactive Canvas Container -->
+          <div class="gis-canvas-container">
+            <canvas id="gisMapCanvas"></canvas>
+
+            <div class="gis-controls-overlay">
+              <button class="gis-btn" onclick="showToast('Zoom In')">+</button>
+              <button class="gis-btn" onclick="showToast('Zoom Out')">−</button>
+              <button class="gis-btn" onclick="showToast('📍 GPS Fixed: 18.1523° N, 74.5768° E')">🎯</button>
+            </div>
+
+            <div class="gis-layer-pill">
+              <span>🛰️</span>
+              <span data-i18n="layerSatellite">उपग्रह (सॅटेलाइट) दृश्य</span>
+            </div>
+          </div>
+
+          <div style="font-size: 11px; color: var(--text-muted); text-align: center; margin-bottom: 10px;" data-i18n="tapPlotPrompt">
+            विवरण आणि माती तपासणी पाहण्यासाठी नकाशावरील कोणत्याही प्लॉटवर टॅप करा
+          </div>
+
+          <!-- Bottom Plot Inspection Sheet -->
+          <div id="gisPlotSheet" class="card" style="border: 2px solid var(--primary-400);">
+            <div style="font-family: var(--font-heading); font-size: 15px; font-weight: 700; color: var(--primary-900);">Field 2 — Well Plot</div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">Crop: <strong>Sugarcane (Co-86032)</strong> • 5.0 Acres</div>
+            <div style="display: flex; gap: 8px; font-size: 11px;">
+              <span class="crop-chip">🧪 Clay Loam Soil</span>
+              <span class="crop-chip">💧 Soil Moisture: 68%</span>
+              <span class="crop-chip">🌱 Health: 94%</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SCREEN G2: TELEMETRY & ACTIVITY LOG ==================== -->
+      <section id="screen-telemetry" class="screen">
+        <div class="nav-header">
+          <button class="back-btn" onclick="goBack()">←</button>
+          <span class="screen-title" data-i18n="telemetryTitle">माती व पीक आरोग्य टेलिमेट्री</span>
+          <button class="btn btn-secondary" style="min-height: 34px; padding: 4px 10px; font-size: 11.5px;" onclick="openLogActivityModal()" data-i18n="logActivityBtn">
+            + काम नोंदवा
+          </button>
+        </div>
+
+        <div class="content-body">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-size: 11.5px; color: #15803d; font-weight: 700;" data-i18n="syncStatusSynced">🟢 सर्व माहिती सर्व्हरशी सिंक आहे</span>
+            <span style="font-size: 11px; color: var(--text-light);">Server: Ktor 8080</span>
+          </div>
+
+          <!-- Metrics Row -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px;">
+            <div class="card" style="padding: 12px; text-align: center; margin-bottom: 0;">
+              <div style="font-size: 10px; color: var(--text-muted);" data-i18n="plantHealthMetric">पीक आरोग्य</div>
+              <div style="font-size: 20px; font-weight: 800; color: #16a34a;">95%</div>
+            </div>
+            <div class="card" style="padding: 12px; text-align: center; margin-bottom: 0;">
+              <div style="font-size: 10px; color: var(--text-muted);" data-i18n="soilMoistureMetric">माती ओलावा</div>
+              <div style="font-size: 20px; font-weight: 800; color: #0284c7;">72%</div>
+            </div>
+            <div class="card" style="padding: 12px; text-align: center; margin-bottom: 0;">
+              <div style="font-size: 10px; color: var(--text-muted);" data-i18n="soilPhMetric">माती सामू (pH)</div>
+              <div style="font-size: 20px; font-weight: 800; color: #d97706;">6.8</div>
+            </div>
+          </div>
+
+          <!-- 7-Day Spline Chart -->
+          <div class="card">
+            <h4 style="font-family: var(--font-heading); font-size: 13px; font-weight: 700; margin-bottom: 10px;" data-i18n="chartTitle">
+              ७ दिवसांचा ओलावा व पीक वाढ आलेख
+            </h4>
+            <div style="width: 100%; height: 180px;">
+              <canvas id="splineChartCanvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Activities Timeline -->
+          <h3 class="section-title" data-i18n="activityLogTitle">शेतातील कामांचा इतिहास</h3>
+          <div id="activitiesTimelineContainer" style="margin-top: 8px;"></div>
+        </div>
+      </section>
+
+      <!-- ==================== SCREEN H: PROFILE & SETTINGS ==================== -->
+      <section id="screen-profile" class="screen">
+        <div class="nav-header">
+          <button class="back-btn" onclick="goBack()">←</button>
+          <span class="screen-title" data-i18n="profileTitle">शेतकरी प्रोफाइल व सेटिंग्ज</span>
+          <span>⚙️</span>
+        </div>
+
+        <div class="content-body">
+          <!-- Profile Card -->
+          <div class="card" style="display: flex; gap: 14px; align-items: center;">
+            <div style="width: 58px; height: 58px; border-radius: 50%; background: #dcfce7; display: flex; align-items: center; justify-content: center; font-size: 28px; border: 2px solid var(--primary-500);">
+              👨‍🌾
+            </div>
+            <div>
+              <h2 style="font-family: var(--font-heading); font-size: 17px; font-weight: 800;">राहुल पाटील (Rahul Patil)</h2>
+              <div style="font-size: 12px; color: var(--text-muted);">कोड: <strong>MH-PUN-0924</strong> • १२.५ एकर</div>
+              <div style="font-size: 12px; color: var(--primary-700); font-weight: 600;">📞 +91 9822012345</div>
+            </div>
+          </div>
+
+          <!-- Language Settings -->
+          <div class="card">
+            <h4 style="font-family: var(--font-heading); font-size: 14px; font-weight: 700; margin-bottom: 10px;" data-i18n="languageSetting">
+              अ‍ॅपची भाषा (App Language)
+            </h4>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn btn-secondary lang-pill" data-lang="en" style="flex: 1;" onclick="setLanguage('en')">English</button>
+              <button class="btn btn-secondary lang-pill" data-lang="hi" style="flex: 1;" onclick="setLanguage('hi')">हिंदी</button>
+              <button class="btn btn-secondary lang-pill active" data-lang="mr" style="flex: 1;" onclick="setLanguage('mr')">मराठी</button>
+            </div>
+          </div>
+
+          <!-- Helpline Box -->
+          <div class="card" style="background: #f0fdf4; border-color: #bbf7d0;">
+            <div style="font-weight: 700; font-size: 13px; color: var(--primary-800); margin-bottom: 4px;" data-i18n="helplineTitle">
+              किसान कॉल सेंटर / तज्ञ मार्गदर्शन
+            </div>
+            <div style="font-size: 14px; font-weight: 800; color: var(--primary-700);" data-i18n="helplineNumber">
+              टोल-फ्री: १८००-१८०-१५५१
+            </div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+              सकाळी ६ ते रात्री १० पर्यंत मोफत कृषी तज्ञांचे मार्गदर्शन उपलब्ध
+            </div>
+          </div>
+
+          <!-- Backend & Reset Actions -->
+          <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 8px;">
+            <button class="btn btn-secondary" onclick="workingData = resetWorkingData(); renderAllData(); showToast('Demo data reset successfully');" data-i18n="sampleDataResetBtn">
+              🔄 डेमो डेटा पूर्ववत करा
+            </button>
+            <button class="btn btn-primary" style="background: #dc2626;" onclick="handleLogout()" data-i18n="logoutBtn">
+              🚪 लॉगआउट करा
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- End of Screen Container -->
+
+    <!-- Persistent Bottom Navigation Bar -->
+    <nav class="bottom-nav" id="bottomNav">
+      <button class="nav-item active" id="navHome">
+        <span class="nav-icon">🏡</span>
+        <span data-i18n="navHome">मुख्य</span>
+      </button>
+      <button class="nav-item" id="navMyFarm">
+        <span class="nav-icon">🚜</span>
+        <span data-i18n="navMyFarm">माझी शेती</span>
+      </button>
+      <button class="nav-item" id="navAdvisory">
+        <span class="nav-icon">🌾</span>
+        <span data-i18n="navAdvisory">कृषी सल्ला</span>
+      </button>
+      <button class="nav-item" id="navProfile">
+        <span class="nav-icon">👤</span>
+        <span data-i18n="navProfile">प्रोफाइल</span>
+      </button>
+    </nav>
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- Modal 1: Field Inspection Modal -->
+    <div id="fieldDetailModal" class="modal-overlay">
+      <div class="modal-sheet">
+        <div class="modal-header">
+          <h3 id="modalFieldName" class="modal-title">Field Inspection</h3>
+          <button class="close-modal-btn">✕</button>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
+          <div>🌾 <strong>Crop & Variety:</strong> <span id="modalCropName">Sugarcane (Co-86032)</span></div>
+          <div>📏 <strong>Area:</strong> <span id="modalFieldArea">5.0 Acres</span></div>
+          <div>🧪 <strong>Soil Type:</strong> <span id="modalSoilType">Clay Loam</span></div>
+          <div>💧 <strong>Irrigation:</strong> <span id="modalIrrigation">Drip Fertigation</span></div>
+          <div>🌱 <strong>Health Score:</strong> <span id="modalHealthScore">94%</span></div>
+          <div style="background: #f8fafc; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
+            📝 <strong>Notes:</strong> <span id="modalFieldNotes"></span>
+          </div>
+          <button class="btn btn-primary" style="margin-top: 10px;" onclick="document.getElementById('fieldDetailModal').classList.remove('active'); openLogActivityModal();">
+            + या प्लॉटसाठी काम नोंदवा
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 2: Add Field Modal -->
+    <div id="addFieldModal" class="modal-overlay">
+      <div class="modal-sheet">
+        <div class="modal-header">
+          <h3 class="modal-title">+ नवीन प्लॉट जोडा</h3>
+          <button class="close-modal-btn">✕</button>
+        </div>
+        <form id="addFieldForm">
+          <div class="form-group">
+            <label class="form-label">प्लॉटचे नाव (Field Name)</label>
+            <input type="text" id="newFieldName" class="form-input" placeholder="उदा. विहिरीचा तुकडा (Well Plot)" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">क्षेत्रफळ (एकरात / Acres)</label>
+            <input type="number" step="0.1" id="newFieldArea" class="form-input" placeholder="3.5" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">पीक निवडा</label>
+            <select id="newFieldCrop" class="form-input">
+              <option value="Sugarcane">ऊस (Sugarcane)</option>
+              <option value="Wheat">गहू (Wheat)</option>
+              <option value="Red Onion">कांदा (Red Onion)</option>
+              <option value="Tomato">टोमॅटो (Tomato)</option>
+              <option value="Cotton">कापूस (Cotton)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">जमिनीचा प्रकार (Soil Type)</label>
+            <select id="newFieldSoil" class="form-input">
+              <option value="Black Cotton Soil">काळी भारी जमीन (Black Cotton)</option>
+              <option value="Clay Loam Soil">मध्यम काळी जमीन (Clay Loam)</option>
+              <option value="Red Sandy Soil">तांबडी वालुकामय जमीन (Sandy Loam)</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">प्लॉट जतन करा (Save Plot)</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal 3: Log Activity Modal -->
+    <div id="logActivityModal" class="modal-overlay">
+      <div class="modal-sheet">
+        <div class="modal-header">
+          <h3 class="modal-title">+ नवीन शेती काम नोंदवा</h3>
+          <button class="close-modal-btn">✕</button>
+        </div>
+        <form id="logActivityForm">
+          <div class="form-group">
+            <label class="form-label">कामाचा प्रकार (Operation)</label>
+            <select id="newActType" class="form-input">
+              <option value="Drip Irrigation">ठिबक सिंचन (Drip Irrigation)</option>
+              <option value="Fertilizer Application">खत देणे (Fertilization)</option>
+              <option value="Pesticide Spray">कीटकनाशक फवारणी (Spray)</option>
+              <option value="Weeding">खुरपणी (Weeding)</option>
+              <option value="Harvesting">काढणी / तोडणी (Harvesting)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">प्लॉट निवडा</label>
+            <select id="newActField" class="form-input">
+              <option value="Field 2 — Well Plot">Field 2 — Well Plot (ऊस)</option>
+              <option value="Field 1 — North Canal Block">Field 1 — North Canal (गहू)</option>
+              <option value="Field 3 — Roadside Plot">Field 3 — Roadside (कांदा)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">तपशील व नोंदी (Notes)</label>
+            <textarea id="newActNotes" class="form-input" style="min-height: 80px;" placeholder="उदा. ४ तास ठिबक सिंचन चालवले..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">नोंद जतन करा</button>
+        </form>
+      </div>
+    </div>
+
+  </div><!-- End of Phone Frame -->
+
+  <!-- Scripts -->
+  <script src="js/translations.js"></script>
+  <script src="js/sample-data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
