@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "KisanSaathi",
+    "slug": "kisansaathi-farmer-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#14532D"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.kisansaathi.farmerapp",
+      "adaptiveIcon": {
+        "backgroundColor": "#14532D",
+        "foregroundImage": "./assets/android-icon-foreground.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
