@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import { COLORS, SPACING, RADIUS, SHADOWS } from '../../constants/theme';
 import { useLanguage } from '../../i18n';
@@ -94,16 +95,26 @@ export const DashboardScreen: React.FC<{ navigation: any }> = ({ navigation }) =
           activeOpacity={0.9}
           onPress={() => navigation.navigate('My Farm')}
         >
-          <View style={styles.farmSnapRow}>
-            <View>
-              <Text style={styles.farmSnapTitle}>🚜 {farmer.name}'s Farm</Text>
-              <Text style={styles.farmSnapSubtitle}>
-                {farmer.village}, {farmer.taluka} • {farmer.soilType}
-              </Text>
-            </View>
-            <View style={styles.farmAreaBadge}>
-              <Text style={styles.farmAreaVal}>{totalAcres}</Text>
-              <Text style={styles.farmAreaUnit}>Acres</Text>
+          <View style={styles.farmHeroImageContainer}>
+            <Image
+              source={require('../../../assets/images/farm_hero.jpg')}
+              style={styles.farmHeroImage}
+              resizeMode="cover"
+            />
+            <View style={styles.farmImageOverlay} />
+            <View style={styles.farmImageContent}>
+              <View style={styles.farmSnapRow}>
+                <View style={{ flex: 1, marginRight: 8 }}>
+                  <Text style={styles.farmSnapTitle}>🚜 {farmer.name}'s Farm</Text>
+                  <Text style={styles.farmSnapSubtitle}>
+                    {farmer.village}, {farmer.taluka} • {farmer.soilType}
+                  </Text>
+                </View>
+                <View style={styles.farmAreaBadge}>
+                  <Text style={styles.farmAreaVal}>{totalAcres}</Text>
+                  <Text style={styles.farmAreaUnit}>Acres</Text>
+                </View>
+              </View>
             </View>
           </View>
 
@@ -225,11 +236,30 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     marginHorizontal: SPACING.lg,
     borderRadius: RADIUS.lg,
-    padding: SPACING.cardPadding,
     marginTop: SPACING.xs,
     borderWidth: 1,
     borderColor: '#E2E8F0',
-    ...SHADOWS.sm,
+    overflow: 'hidden',
+    padding: 0,
+    ...SHADOWS.md,
+  },
+  farmHeroImageContainer: {
+    height: 120,
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  farmHeroImage: {
+    width: '100%',
+    height: '100%',
+  },
+  farmImageOverlay: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: 'rgba(15, 23, 42, 0.45)',
+  },
+  farmImageContent: {
+    ...StyleSheet.absoluteFill,
+    padding: SPACING.cardPadding,
+    justifyContent: 'flex-end',
   },
   farmSnapRow: {
     flexDirection: 'row',
@@ -237,14 +267,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   farmSnapTitle: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: '800',
-    color: COLORS.textMain,
+    color: '#FFFFFF',
+    textShadowColor: 'rgba(0, 0, 0, 0.6)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
   },
   farmSnapSubtitle: {
     fontSize: 11.5,
-    color: COLORS.textMuted,
+    color: '#D1FAE5',
     marginTop: 2,
+    fontWeight: '600',
   },
   farmAreaBadge: {
     backgroundColor: COLORS.primarySubtle,

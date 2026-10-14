@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { LanguageProvider } from './src/i18n';
 import { AppProvider } from './src/context/AppContext';
 import { AppNavigator } from './src/navigation/AppNavigator';
+import { PhoneChassis } from './src/components/PhoneChassis';
 
 export default function App() {
   return (
@@ -11,7 +12,9 @@ export default function App() {
       <LanguageProvider>
         <AppProvider>
           <StatusBar style="light" />
-          <AppNavigator />
+          <PhoneChassis>
+            <AppNavigator />
+          </PhoneChassis>
         </AppProvider>
       </LanguageProvider>
     </SafeAreaProvider>

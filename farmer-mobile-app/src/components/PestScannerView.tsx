@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
 import { COLORS, SPACING, RADIUS, SHADOWS } from '../constants/theme';
 import { useLanguage } from '../i18n';
 import { pestDatabase } from '../api/mockData';
@@ -53,14 +53,18 @@ export const PestScannerView: React.FC = () => {
         ))}
       </View>
 
-      {/* Simulated Camera Viewfinder */}
+      {/* Simulated Camera Viewfinder with Real Botanical Leaf Photo */}
       <View style={styles.viewfinder}>
-        <View style={styles.leafDisplay}>
-          <Text style={styles.leafEmoji}>
-            {selectedCrop === 'sugarcane' ? '🎋' : selectedCrop === 'tomato' ? '🍅' : selectedCrop === 'wheat' ? '🌾' : '🧅'}
-          </Text>
+        <Image
+          source={require('../../assets/images/leaf_disease.jpg')}
+          style={styles.leafPhoto}
+          resizeMode="cover"
+        />
+        <View style={styles.leafPhotoOverlay} />
+
+        <View style={styles.leafBadgeTop}>
           <Text style={styles.leafStatusText}>
-            {selectedCrop.toUpperCase()} LEAF SAMPLE READY FOR ANALYSIS
+            🔴 LIVE DIAGNOSTIC CAM • {selectedCrop.toUpperCase()}
           </Text>
         </View>
 
@@ -194,16 +198,27 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#334155',
   },
-  leafDisplay: {
-    alignItems: 'center',
+  leafPhoto: {
+    width: '100%',
+    height: '100%',
   },
-  leafEmoji: {
-    fontSize: 54,
-    marginBottom: 6,
+  leafPhotoOverlay: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: 'rgba(15, 23, 42, 0.25)',
+  },
+  leafBadgeTop: {
+    position: 'absolute',
+    top: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: RADIUS.full,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
   },
   leafStatusText: {
-    color: '#94A3B8',
-    fontSize: 10,
+    color: '#F8FAFC',
+    fontSize: 9.5,
     fontWeight: '700',
     letterSpacing: 0.5,
   },

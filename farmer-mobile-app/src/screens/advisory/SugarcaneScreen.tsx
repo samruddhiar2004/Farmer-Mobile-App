@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  Image,
 } from 'react-native';
 import { COLORS, SPACING, RADIUS, SHADOWS } from '../../constants/theme';
 import { useLanguage } from '../../i18n';
@@ -44,17 +45,24 @@ export const SugarcaneScreen: React.FC<{ navigation: any }> = ({ navigation }) =
           <Text style={styles.subtitle}>{t('sugarcaneVariety')}</Text>
         </View>
 
-        {/* Variety Banner */}
+        {/* Variety Banner with Real Photography */}
         <View style={styles.varietyCard}>
-          <View style={styles.varietyTop}>
-            <Text style={styles.varietyTitle}>Co-86032 (Nira) — Adsali Season</Text>
-            <View style={styles.activePill}>
-              <Text style={styles.activePillText}>Stage 3 Active</Text>
+          <Image
+            source={require('../../../assets/images/sugarcane.jpg')}
+            style={styles.caneImage}
+            resizeMode="cover"
+          />
+          <View style={styles.varietyContent}>
+            <View style={styles.varietyTop}>
+              <Text style={styles.varietyTitle}>Co-86032 (Nira) — Adsali</Text>
+              <View style={styles.activePill}>
+                <Text style={styles.activePillText}>Stage 3 Active</Text>
+              </View>
             </View>
+            <Text style={styles.varietyDesc}>
+              High-tonnage, high-sugar recovery variety widely grown across Maharashtra, Gujarat, and Karnataka. Average yield: 60–80 tonnes/acre under drip.
+            </Text>
           </View>
-          <Text style={styles.varietyDesc}>
-            High-tonnage, high-sugar recovery variety widely grown across Maharashtra, Gujarat, and Karnataka. Average yield: 60–80 tonnes/acre under drip.
-          </Text>
         </View>
 
         {/* 4 Lifecycle Stage Selector Pills */}
@@ -237,11 +245,18 @@ const styles = StyleSheet.create({
   varietyCard: {
     backgroundColor: COLORS.white,
     borderRadius: RADIUS.lg,
-    padding: SPACING.cardPadding,
     marginTop: SPACING.xs,
     borderWidth: 1,
     borderColor: '#E2E8F0',
+    overflow: 'hidden',
     ...SHADOWS.sm,
+  },
+  caneImage: {
+    width: '100%',
+    height: 130,
+  },
+  varietyContent: {
+    padding: SPACING.cardPadding,
   },
   varietyTop: {
     flexDirection: 'row',
