@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Farmer, Field, FarmActivity } from '../types';
-import { mockFarmer, initialFields, initialActivities } from '../api/mockData';
+import { Farmer, Field, FarmActivity, CurrentWeather } from '../types';
+import { mockFarmer, initialFields, initialActivities, mockWeather } from '../api/mockData';
 import { apiClient } from '../api/client';
 
 interface AppContextProps {
@@ -11,6 +11,9 @@ interface AppContextProps {
   activities: FarmActivity[];
   selectedField: Field | null;
   setSelectedField: (field: Field | null) => void;
+  weather: CurrentWeather;
+  isWeatherLoading: boolean;
+  refreshWeather: () => Promise<void>;
   login: (mobile: string, pass: string) => boolean;
   quickDemoLogin: () => void;
   logout: () => void;
@@ -32,8 +35,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [activities, setActivities] = useState<FarmActivity[]>(initialActivities);
   const [selectedField, setSelectedField] = useState<Field | null>(initialFields[0]);
   const [isSynced, setIsSynced] = useState<boolean>(true);
+  const [weather, setWeather] = useState<CurrentWeather>(mockWeather);
+  const [isWeatherLoading, setIsWeatherLoading] = useState<boolean>(false);
+
+  const refreshWeather = async () => {
+    setIsWeatherLoading(true);
+    try {
+      const live = await apiClient.getWeather();
+      setWeather(live);
+    } catch {
+      // Keep existing/cached weather
+    } finally {
+      setIsWeatherLoading(false);
+    }
+  };
 
   useEffect(() => {
+    refreshWeather();
+
     // Restore session and cached records
     AsyncStorage.getItem(STORAGE_AUTH_KEY).then((auth) => {
       if (auth === 'true') setIsAuthenticated(true);
@@ -131,6 +150,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         addField,
         addActivity,
         isSynced,
+        weather,
+        isWeatherLoading,
+        refreshWeather,
       }}
     >
       {children}

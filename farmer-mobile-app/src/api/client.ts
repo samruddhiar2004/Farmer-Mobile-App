@@ -5,6 +5,8 @@ import { Field, FarmActivity } from '../types';
 // Android Emulator accesses host machine localhost via 10.0.2.2
 export const API_BASE_URL = Platform.OS === 'android' ? 'http://10.0.2.2:8080' : 'http://localhost:8080';
 
+import { fetchLiveWeather } from './weatherApi';
+
 export const apiClient = {
   getFarmerProfile: async () => {
     try {
@@ -50,7 +52,9 @@ export const apiClient = {
     }
   },
 
-  getWeather: () => mockWeather,
+  getWeather: async (lat?: number, lng?: number) => {
+    return await fetchLiveWeather(lat, lng);
+  },
   getPestDiagnoses: () => pestDatabase,
   getSugarcaneStages: () => sugarcaneStages,
 };

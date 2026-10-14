@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Image, Alert, Platform } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { COLORS, SPACING, RADIUS, SHADOWS } from '../constants/theme';
 import { useLanguage } from '../i18n';
 import { pestDatabase } from '../api/mockData';
@@ -9,6 +10,7 @@ export const PestScannerView: React.FC = () => {
   const [selectedCrop, setSelectedCrop] = useState<string>('sugarcane');
   const [isScanning, setIsScanning] = useState<boolean>(false);
   const [scannedResultKey, setScannedResultKey] = useState<string>('sugarcane');
+  const [customImageUri, setCustomImageUri] = useState<string | null>(null);
 
   const crops = [
     { key: 'sugarcane', label: '🎋 Sugarcane / ऊस', emoji: '🎋' },
@@ -17,12 +19,62 @@ export const PestScannerView: React.FC = () => {
     { key: 'onion', label: '🧅 Onion / कांदा', emoji: '🧅' },
   ];
 
-  const handleScan = () => {
+  const triggerScan = (cropKey: string = selectedCrop) => {
     setIsScanning(true);
     setTimeout(() => {
-      setScannedResultKey(selectedCrop);
+      setScannedResultKey(cropKey);
       setIsScanning(false);
     }, 1500);
+  };
+
+  const handleTakeCameraPhoto = async () => {
+    try {
+      const permission = await ImagePicker.requestCameraPermissionsAsync();
+      if (!permission.granted) {
+        Alert.alert('Permission Denied', 'Camera permission is required to photograph crop leaves.');
+        return;
+      }
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.8,
+      });
+
+      if (!result.canceled && result.assets && result.assets[0]?.uri) {
+        setCustomImageUri(result.assets[0].uri);
+        triggerScan(selectedCrop);
+      }
+    } catch (err) {
+      console.warn('Camera error:', err);
+    }
+  };
+
+  const handlePickFromGallery = async () => {
+    try {
+      const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!permission.granted) {
+        Alert.alert('Permission Denied', 'Media library access is required to select crop leaves.');
+        return;
+      }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.8,
+      });
+
+      if (!result.canceled && result.assets && result.assets[0]?.uri) {
+        setCustomImageUri(result.assets[0].uri);
+        triggerScan(selectedCrop);
+      }
+    } catch (err) {
+      console.warn('Gallery error:', err);
+    }
+  };
+
+  const handleResetToSample = () => {
+    setCustomImageUri(null);
   };
 
   const diagnosis = pestDatabase[scannedResultKey] || pestDatabase.sugarcane;
@@ -53,10 +105,14 @@ export const PestScannerView: React.FC = () => {
         ))}
       </View>
 
-      {/* Simulated Camera Viewfinder with Real Botanical Leaf Photo */}
+      {/* Simulated Camera Viewfinder with Real Botanical Leaf Photo or Captured Image */}
       <View style={styles.viewfinder}>
         <Image
-          source={require('../../assets/images/leaf_disease.jpg')}
+          source={
+            customImageUri
+              ? { uri: customImageUri }
+              : require('../../assets/images/leaf_disease.jpg')
+          }
           style={styles.leafPhoto}
           resizeMode="cover"
         />
@@ -64,7 +120,7 @@ export const PestScannerView: React.FC = () => {
 
         <View style={styles.leafBadgeTop}>
           <Text style={styles.leafStatusText}>
-            🔴 LIVE DIAGNOSTIC CAM • {selectedCrop.toUpperCase()}
+            {customImageUri ? '📸 FARMER CAPTURE' : '🔴 LIVE DIAGNOSTIC CAM'} • {selectedCrop.toUpperCase()}
           </Text>
         </View>
 
@@ -86,14 +142,43 @@ export const PestScannerView: React.FC = () => {
         )}
       </View>
 
-      {/* Scan Button */}
+      {/* Real Camera & Photo Input Action Bar */}
+      <View style={styles.photoActionsBar}>
+        <TouchableOpacity
+          style={styles.actionMediaBtn}
+          onPress={handleTakeCameraPhoto}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.actionMediaText}>📷 Take Photo</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.actionMediaBtn}
+          onPress={handlePickFromGallery}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.actionMediaText}>🖼️ Choose Gallery</Text>
+        </TouchableOpacity>
+
+        {customImageUri && (
+          <TouchableOpacity
+            style={[styles.actionMediaBtn, styles.actionMediaBtnAlt]}
+            onPress={handleResetToSample}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.actionMediaTextAlt}>🔄 Reset</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+
+      {/* Scan & Analyze Button */}
       <TouchableOpacity
         style={[styles.scanBtn, isScanning && styles.scanBtnDisabled]}
-        onPress={handleScan}
+        onPress={() => triggerScan(selectedCrop)}
         disabled={isScanning}
       >
         <Text style={styles.scanBtnText}>
-          {isScanning ? '🔍 ' + t('scanningWait') : '📸 ' + t('scanLeafBtn')}
+          {isScanning ? '🔍 ' + t('scanningWait') : '🔬 ' + t('scanLeafBtn')}
         </Text>
       </TouchableOpacity>
 
@@ -263,12 +348,42 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginLeft: 8,
   },
+  photoActionsBar: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: SPACING.sm,
+  },
+  actionMediaBtn: {
+    flex: 1,
+    backgroundColor: '#F1F5F9',
+    borderRadius: RADIUS.md,
+    paddingVertical: 9,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#CBD5E1',
+  },
+  actionMediaBtnAlt: {
+    flex: 0.7,
+    backgroundColor: '#FEF2F2',
+    borderColor: '#FECACA',
+  },
+  actionMediaText: {
+    fontSize: 11.5,
+    fontWeight: '700',
+    color: '#334155',
+  },
+  actionMediaTextAlt: {
+    fontSize: 11.5,
+    fontWeight: '700',
+    color: '#DC2626',
+  },
   scanBtn: {
     backgroundColor: COLORS.primary,
     borderRadius: RADIUS.md,
     paddingVertical: 14,
     alignItems: 'center',
-    marginTop: SPACING.md,
+    marginTop: SPACING.sm,
     ...SHADOWS.md,
   },
   scanBtnDisabled: {

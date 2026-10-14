@@ -6,25 +6,48 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import { COLORS, SPACING, RADIUS, SHADOWS } from '../../constants/theme';
 import { useLanguage } from '../../i18n';
 import { useApp } from '../../context/AppContext';
-import { apiClient } from '../../api/client';
 
 export const WeatherScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const { t } = useLanguage();
-  const { farmer } = useApp();
-  const weather = apiClient.getWeather();
+  const { farmer, weather, isWeatherLoading, refreshWeather } = useApp();
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isWeatherLoading}
+            onRefresh={refreshWeather}
+            colors={[COLORS.primary]}
+          />
+        }
+      >
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-            <Text style={styles.backText}>← Back</Text>
-          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+              <Text style={styles.backText}>← Back</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={refreshWeather}
+              disabled={isWeatherLoading}
+              style={styles.refreshBtn}
+            >
+              {isWeatherLoading ? (
+                <ActivityIndicator size="small" color={COLORS.primary} />
+              ) : (
+                <Text style={styles.refreshBtnText}>🔄 Live Sync</Text>
+              )}
+            </TouchableOpacity>
+          </View>
           <Text style={styles.title}>⛅ {t('weatherTitle')}</Text>
           <Text style={styles.subtitle}>
             📍 {farmer.village}, {farmer.taluka}, {farmer.district} (Baramati Agro-Zone)
@@ -156,6 +179,19 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: COLORS.primary,
     fontWeight: '700',
+  },
+  refreshBtn: {
+    backgroundColor: COLORS.primarySubtle,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: RADIUS.full,
+    borderWidth: 1,
+    borderColor: '#BBF7D0',
+  },
+  refreshBtnText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: COLORS.primaryDark,
   },
   title: {
     fontSize: 20,

@@ -17,8 +17,7 @@ import { apiClient } from '../../api/client';
 
 export const DashboardScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const { t } = useLanguage();
-  const { farmer, fields, activities } = useApp();
-  const weather = apiClient.getWeather();
+  const { farmer, fields, activities, weather } = useApp();
 
   const totalAcres = fields.reduce((sum, f) => sum + f.area, 0);
 
